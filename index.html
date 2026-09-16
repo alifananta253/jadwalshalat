@@ -144,7 +144,7 @@
                 
                 init() {
                     this.updateClock();
-                    this.fetchJadwalShalatEquran();
+                    this.fetchJadwalShalatMyQuran();
                     this.hitungPetugasOtomatis();
 
                     setInterval(() => {
@@ -167,42 +167,29 @@
                     this.tanggalMasehi = now.toLocaleDateString('id-ID', options);
                 },
 
-                // Mengambil Jadwal Shalat Otomatis dari API EQuran.id (DKI Jakarta / Kota Jakarta Pusat)
-                fetchJadwalShalatEquran() {
+                // Menggunakan API MyQuran (ID 1301 untuk Kota Jakarta Pusat) yang aman dari CORS
+                fetchJadwalShalatMyQuran() {
                     const now = new Date();
-                    let bulanIni = now.getMonth() + 1; // 1 - 12
-                    let tahunIni = now.getFullYear();    // 2026
-                    let tanggalHariIni = now.getDate();  // Tanggal 1-31
+                    let yyyy = now.getFullYear();
+                    let mm = String(now.getMonth() + 1).padStart(2, '0');
+                    let dd = String(now.getDate()).padStart(2, '0');
+                    let tanggalHariIni = `${yyyy}-${mm}-${dd}`;
 
-                    fetch('https://equran.id/api/v2/shalat', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            provinsi: "DKI Jakarta",
-                            kabkota: "Kota Jakarta Pusat",
-                            bulan: bulanIni,
-                            tahun: tahunIni
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(res => {
-                        if (res && res.code === 200 && res.data && res.data.jadwal) {
-                            let jadwalHariIni = res.data.jadwal.find(j => j.tanggal === tanggalHariIni);
-                            if (jadwalHariIni) {
+                    fetch(`https://api.myquran.com/v2/sholat/jadwal/1301/${tanggalHariIni}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data && data.status && data.data && data.data.jadwal) {
                                 this.schedule = {
-                                    terbit: jadwalHariIni.terbit,
-                                    subuh: jadwalHariIni.subuh,
-                                    dzuhur: jadwalHariIni.dzuhur,
-                                    ashar: jadwalHariIni.ashar,
-                                    maghrib: jadwalHariIni.maghrib,
-                                    isya: jadwalHariIni.isya
+                                    terbit: data.data.jadwal.terbit,
+                                    subuh: data.data.jadwal.subuh,
+                                    dzuhur: data.data.jadwal.dzuhur,
+                                    ashar: data.data.jadwal.ashar,
+                                    maghrib: data.data.jadwal.maghrib,
+                                    isya: data.data.jadwal.isya
                                 };
                             }
-                        }
-                    })
-                    .catch(error => console.log('Gagal memuat API EQuran.id:', error));
+                        })
+                        .catch(error => console.log('Gagal memuat API Shalat:', error));
                 },
                 
                 hitungPetugasOtomatis() {
