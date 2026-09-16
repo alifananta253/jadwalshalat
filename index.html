@@ -24,7 +24,7 @@
             <h1 class="text-xl sm:text-2xl md:text-3xl font-bold tracking-wider text-blue-400 drop-shadow-md">Masjid Al-Barkah</h1>
             <p class="text-gray-300 text-[11px] sm:text-xs md:text-sm">Jl. Utan Panjang III Gg. I No.4 7, RT.7/RW.6</p>
         </div>
-        <!-- Jam dengan ukuran font responsif -->
+        <!-- Jam Digital Responsif -->
         <div class="order-3 text-xl sm:text-3xl md:text-4xl font-mono font-bold text-blue-400 drop-shadow-lg" x-text="jamSekarang">
             00:00:00
         </div>
@@ -69,7 +69,7 @@
             </div>
         </div>
 
-        <!-- Kotak Waktu Shalat -->
+        <!-- Kotak Waktu Shalat (Responsive Grid: 2 kolom di HP, 3 di tablet, 6 di layar besar) -->
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 p-3 text-center">
             <div class="bg-emerald-800/80 rounded-lg p-2 border border-emerald-600 shadow-inner">
                 <div class="text-[10px] sm:text-xs md:text-sm uppercase tracking-wider text-emerald-200 font-medium">Terbit</div>
@@ -109,7 +109,7 @@
                 jamSekarang: '',
                 tanggalMasehi: '',
                 currentIndex: 0,
-                schedule: { terbit: '05:52', subuh: '04:40', dzuhur: '11:58', ashar: '15:16', maghrib: '17:56', isya: '19:06' },
+                schedule: { terbit: '--:--', subuh: '--:--', dzuhur: '--:--', ashar: '--:--', maghrib: '--:--', isya: '--:--' },
                 
                 listJadwalPetugas: [
                     {
@@ -144,7 +144,7 @@
                 
                 init() {
                     this.updateClock();
-                    this.fetchJadwalShalatApi();
+                    this.fetchJadwalShalatEquran();
                     this.hitungPetugasOtomatis();
 
                     setInterval(() => {
@@ -164,21 +164,43 @@
                     this.tanggalMasehi = now.toLocaleDateString('id-ID', options);
                 },
 
-                fetchJadwalShalatApi() {
+                // Mengambil Jadwal Shalat Otomatis dari API EQuran.id (DKI Jakarta / Kota Jakarta Pusat)
+                fetchJadwalShalatEquran() {
                     const now = new Date();
-                    let yyyy = now.getFullYear();
-                    let mm = String(now.getMonth() + 1).padStart(2, '0');
-                    let dd = String(now.getDate()).padStart(2, '0');
-                    let tanggalHariIni = `${yyyy}-${mm}-${dd}`;
+                    let bulanIni = now.getMonth() + 1; // 1 - 12
+                    let tahunIni = now.getFullYear();    // 2026
+                    let tanggalHariIni = now.getDate();  // Tanggal 1-31
 
-                    fetch(`https://api.myquran.com/v2/sholat/jadwal/1301/${tanggalHariIni}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data && data.status) {
-                                this.schedule = data.data.jadwal;
-                            }
+                    fetch('https://equran.id/api/v2/shalat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            provinsi: "DKI Jakarta",
+                            kabkota: "Kota Jakarta Pusat",
+                            bulan: bulanIni,
+                            tahun: tahunIni
                         })
-                        .catch(error => console.log('Gagal memuat API Shalat:', error));
+                    })
+                    .then(response => response.json())
+                    .then(res => {
+                        if (res && res.code === 200 && res.data && res.data.jadwal) {
+                            // Cari data jadwal berdasarkan tanggal hari ini
+                            let jadwalHariIni = res.data.jadwal.find(j => j.tanggal === tanggalHariIni);
+                            if (jadwalHariIni) {
+                                this.schedule = {
+                                    terbit: jadwalHariIni.terbit,
+                                    subuh: jadwalHariIni.subuh,
+                                    dzuhur: jadwalHariIni.dzuhur,
+                                    ashar: jadwalHariIni.ashar,
+                                    maghrib: jadwalHariIni.maghrib,
+                                    isya: jadwalHariIni.isya
+                                };
+                            }
+                        }
+                    })
+                    .catch(error => console.log('Gagal memuat API EQuran.id:', error));
                 },
                 
                 hitungPetugasOtomatis() {
