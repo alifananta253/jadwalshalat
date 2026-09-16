@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jadwal Shalat - Masjid Al - Barkah</title>
+    <title>Jadwal Shalat - Masjid Al-Barkah</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Alpine.js untuk Jam Realtime & Logika Otomatis -->
@@ -12,35 +12,35 @@
         body { background-color: #0b0f19; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     </style>
 </head>
-<body class="h-screen w-screen overflow-hidden flex flex-col justify-between text-white select-none" x-data="dashboardData()">
+<body class="min-h-screen flex flex-col justify-between text-white select-none" x-data="dashboardData()">
 
     <!-- HEADER -->
-    <header class="flex justify-between items-center px-8 py-4 bg-gradient-to-b from-black/80 to-transparent">
-        <div>
-            <div class="text-blue-400 font-semibold text-lg" x-text="tanggalMasehi"></div>
-            <div class="text-gray-300 text-sm"></div>
+    <header class="flex flex-col md:flex-row justify-between items-center px-4 md:px-8 py-4 bg-gradient-to-b from-black/80 to-transparent gap-3 text-center md:text-left">
+        <div class="order-2 md:order-1">
+            <div class="text-blue-400 font-semibold text-sm md:text-lg" x-text="tanggalMasehi"></div>
+            <div class="text-gray-300 text-xs"></div>
         </div>
-        <div class="text-center">
-            <h1 class="text-3xl font-bold tracking-wider text-blue-400 drop-shadow-md">Masjid Al- Barkah</h1>
-            <p class="text-gray-300 text-sm">Jl. Utan Panjang III Gg. I No.4 7, RT.7/RW.6</p>
+        <div class="order-1 md:order-2">
+            <h1 class="text-2xl md:text-3xl font-bold tracking-wider text-blue-400 drop-shadow-md">Masjid Al-Barkah</h1>
+            <p class="text-gray-300 text-xs md:text-sm">Jl. Utan Panjang III Gg. I No.4 7, RT.7/RW.6</p>
         </div>
-        <div class="text-4xl font-mono font-bold text-blue-400 drop-shadow-lg" x-text="jamSekarang">
+        <div class="order-3 text-2xl md:text-4xl font-mono font-bold text-blue-400 drop-shadow-lg" x-text="jamSekarang">
             00:00:00
         </div>
     </header>
 
     <!-- MAIN CONTENT (Background Gambar Masjid & Ayat Berganti Setiap 1 Menit) -->
-    <main class="relative flex-1 flex flex-col items-center justify-center text-center px-4 bg-cover bg-center transition-all duration-1000" style="background-image: url('https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&q=80&w=1920');">
+    <main class="relative flex-1 flex flex-col items-center justify-center text-center p-6 my-auto bg-cover bg-center transition-all duration-1000 min-h-[40vh]" style="background-image: url('https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&q=80&w=1920');">
         <!-- Overlay gelap agar teks terbaca jelas -->
-        <div class="absolute inset-0 bg-black/50 backdrop-blur-[2px]"></div>
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-[2px]"></div>
 
-        <div class="relative z-10 max-w-4xl transition-opacity duration-700">
+        <div class="relative z-10 max-w-4xl transition-opacity duration-700 px-2">
             <!-- Teks Arab -->
-            <p class="text-3xl md:text-5xl font-serif text-amber-200 mb-4 drop-shadow-lg" x-text="currentAyat.arab">
+            <p class="text-2xl sm:text-3xl md:text-5xl font-serif text-amber-200 mb-4 drop-shadow-lg leading-relaxed" x-text="currentAyat.arab">
                 فَبِأَيِّ آلَاءِ رَبِّكُمَا تُكَذِّبَانِ
             </p>
             <!-- Terjemahan -->
-            <p class="text-lg md:text-2xl text-gray-100 font-light italic drop-shadow" x-text="currentAyat.terjemahan">
+            <p class="text-sm sm:text-base md:text-2xl text-gray-100 font-light italic drop-shadow" x-text="currentAyat.terjemahan">
                 "Maka, nikmat Tuhanmu manakah yang kamu dustakan?"
             </p>
         </div>
@@ -48,60 +48,60 @@
 
     <!-- PETUGAS & JADWAL SHALAT -->
     <footer class="bg-black/90 border-t border-blue-900/50">
-        <!-- Informasi Petugas Otomatis Berdasarkan Tanggal Aktif (TGL-BLN-THN) -->
-        <div class="grid grid-cols-4 text-center py-2 px-4 text-xs md:text-sm border-b border-gray-800 text-gray-300 bg-gray-900/80">
+        <!-- Informasi Petugas Otomatis Berdasarkan Tanggal Aktif -->
+        <div class="grid grid-cols-2 md:grid-cols-4 text-center py-3 px-4 text-xs md:text-sm border-b border-gray-800 text-gray-300 bg-gray-900/80 gap-2">
             <div>
                 <span class="block text-gray-400 text-[10px] uppercase">Petugas Shalat</span>
-                <span class="font-semibold text-white" x-text="petugasAktif.tampilanTanggal">Jumat, --</span>
+                <span class="font-semibold text-white text-xs md:text-sm" x-text="petugasAktif.tampilanTanggal">Jumat, --</span>
             </div>
             <div>
                 <span class="block text-gray-400 text-[10px] uppercase">Muazin</span>
-                <span class="font-semibold text-amber-300" x-text="petugasAktif.muazin">-</span>
+                <span class="font-semibold text-amber-300 text-xs md:text-sm" x-text="petugasAktif.muazin">-</span>
             </div>
             <div>
                 <span class="block text-gray-400 text-[10px] uppercase">Khatib</span>
-                <span class="font-semibold text-amber-300" x-text="petugasAktif.khatib">-</span>
+                <span class="font-semibold text-amber-300 text-xs md:text-sm" x-text="petugasAktif.khatib">-</span>
             </div>
             <div>
                 <span class="block text-gray-400 text-[10px] uppercase">Imam</span>
-                <span class="font-semibold text-amber-300" x-text="petugasAktif.imam">-</span>
+                <span class="font-semibold text-amber-300 text-xs md:text-sm" x-text="petugasAktif.imam">-</span>
             </div>
         </div>
 
-        <!-- Kotak Waktu Shalat (Dynamic dari API Publik MyQuran) -->
-        <div class="grid grid-cols-6 gap-2 p-3 text-center">
+        <!-- Kotak Waktu Shalat (Responsive Grid: 2 kolom di HP, 3 di tablet, 6 di layar besar) -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 p-3 text-center">
             <div class="bg-emerald-800/80 rounded-lg p-2 border border-emerald-600 shadow-inner">
-                <div class="text-xs md:text-sm uppercase tracking-wider text-emerald-200 font-medium">Terbit</div>
-                <div class="text-xl md:text-3xl font-bold font-mono mt-1" x-text="schedule.terbit">--:--</div>
+                <div class="text-[11px] md:text-sm uppercase tracking-wider text-emerald-200 font-medium">Terbit</div>
+                <div class="text-lg md:text-2xl font-bold font-mono mt-1" x-text="schedule.terbit">--:--</div>
             </div>
             <div class="bg-blue-800/80 rounded-lg p-2 border border-blue-600 shadow-inner">
-                <div class="text-xs md:text-sm uppercase tracking-wider text-blue-200 font-medium">Subuh</div>
-                <div class="text-xl md:text-3xl font-bold font-mono mt-1" x-text="schedule.subuh">--:--</div>
+                <div class="text-[11px] md:text-sm uppercase tracking-wider text-blue-200 font-medium">Subuh</div>
+                <div class="text-lg md:text-2xl font-bold font-mono mt-1" x-text="schedule.subuh">--:--</div>
             </div>
             <div class="bg-amber-600/90 rounded-lg p-2 border border-amber-500 shadow-inner">
-                <div class="text-xs md:text-sm uppercase tracking-wider text-amber-100 font-medium">Dzhuhur</div>
-                <div class="text-xl md:text-3xl font-bold font-mono mt-1" x-text="schedule.dzuhur">--:--</div>
+                <div class="text-[11px] md:text-sm uppercase tracking-wider text-amber-100 font-medium">Dzuhur</div>
+                <div class="text-lg md:text-2xl font-bold font-mono mt-1" x-text="schedule.dzuhur">--:--</div>
             </div>
             <div class="bg-indigo-800/80 rounded-lg p-2 border border-indigo-600 shadow-inner">
-                <div class="text-xs md:text-sm uppercase tracking-wider text-indigo-200 font-medium">Ashar</div>
-                <div class="text-xl md:text-3xl font-bold font-mono mt-1" x-text="schedule.ashar">--:--</div>
+                <div class="text-[11px] md:text-sm uppercase tracking-wider text-indigo-200 font-medium">Ashar</div>
+                <div class="text-lg md:text-2xl font-bold font-mono mt-1" x-text="schedule.ashar">--:--</div>
             </div>
             <div class="bg-rose-800/80 rounded-lg p-2 border border-rose-600 shadow-inner">
-                <div class="text-xs md:text-sm uppercase tracking-wider text-rose-200 font-medium">Maghrib</div>
-                <div class="text-xl md:text-3xl font-bold font-mono mt-1" x-text="schedule.maghrib">--:--</div>
+                <div class="text-[11px] md:text-sm uppercase tracking-wider text-rose-200 font-medium">Maghrib</div>
+                <div class="text-lg md:text-2xl font-bold font-mono mt-1" x-text="schedule.maghrib">--:--</div>
             </div>
             <div class="bg-cyan-800/80 rounded-lg p-2 border border-cyan-600 shadow-inner">
-                <div class="text-xs md:text-sm uppercase tracking-wider text-cyan-200 font-medium">Isya</div>
-                <div class="text-xl md:text-3xl font-bold font-mono mt-1" x-text="schedule.isya">--:--</div>
+                <div class="text-[11px] md:text-sm uppercase tracking-wider text-cyan-200 font-medium">Isya</div>
+                <div class="text-lg md:text-2xl font-bold font-mono mt-1" x-text="schedule.isya">--:--</div>
             </div>
         </div>
 
-        <div class="bg-black text-amber-400 text-xs py-1 px-4 overflow-hidden whitespace-nowrap">
+        <div class="bg-black text-amber-400 text-xs py-1.5 px-4 overflow-hidden whitespace-nowrap">
             <marquee scrollamount="5">⚠️ HP mohon dimode pesawat dulu selama berada di dalam area masjid. • Selamat datang di Masjid Al-Barkah.</marquee>
         </div>
     </footer>
 
-    <!-- Script Logika Mandiri (Tanpa Laravel) -->
+    <!-- Script Logika Mandiri -->
     <script>
         function dashboardData() {
             return {
@@ -110,13 +110,12 @@
                 currentIndex: 0,
                 schedule: { terbit: '05:52', subuh: '04:40', dzuhur: '11:58', ashar: '15:16', maghrib: '17:56', isya: '19:06' },
                 
-                // DATA JADWAL PETUGAS (Atur nama dan tanggal Jumat di sini)
                 listJadwalPetugas: [
                     {
-                        tanggal: '2026-08-28',
+                        tanggal: '2026-09-18',
                         muazin: 'Abu Hamzah',
                         khatib: 'Abdullah, S.Ag',
-                        imam: 'Abdullah, S.Ag'
+                        imam: 'Alif Ananta Ulya, S.Kom'
                     },
                     {
                         tanggal: '2026-09-04',
@@ -136,8 +135,8 @@
 
                 ayatList: [
                     { arab: "فَبِأَيِّ آلَاءِ رَبِّكُمَا تُكَذِّبَانِ", terjemahan: "\"Maka, nikmat Tuhanmu manakah yang kamu dustakan?\" (QS. Ar-Rahman)" },
-                    { arab: "أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ", terjemahan: "\"Ingatlah hanya dengan mengingat Allah hati menjadi tenteram.\" (QS. Ar-Ra'd: 28)" },
-                    { arab: "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا", terjemahan: "\"Maka sesungguhnya bersama kesulitan itu ada kemudahan.\" (QS. Al-Insyirah: 5)" }
+                    { arab: "أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ", terjemahan: "\"Ingatlah hanya dengan mengingat Allah hati menjadi tenteram.\" (QS. Ar-Ra'd: 28)" },
+                    { arab: "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا", terjemahan: "\"Maka sesungguhnya bersama kesulitan itu ada kemudahan.\" (QS. Al-Insyirah: 5)" }
                 ],
                 
                 get currentAyat() { return this.ayatList[this.currentIndex]; },
@@ -147,13 +146,11 @@
                     this.fetchJadwalShalatApi();
                     this.hitungPetugasOtomatis();
 
-                    // Update jam, cek perubahan hari, & ambil data shalat harian
                     setInterval(() => {
                         this.updateClock();
                         this.hitungPetugasOtomatis();
                     }, 1000);
 
-                    // Ganti ayat setiap 60 detik
                     setInterval(() => {
                         this.currentIndex = (this.currentIndex + 1) % this.ayatList.length;
                     }, 60000);
@@ -166,7 +163,6 @@
                     this.tanggalMasehi = now.toLocaleDateString('id-ID', options);
                 },
 
-                // Mengambil Jadwal Shalat Otomatis dari API Publik (Contoh: ID 1301 untuk Jakarta)
                 fetchJadwalShalatApi() {
                     const now = new Date();
                     let yyyy = now.getFullYear();
@@ -187,7 +183,7 @@
                 hitungPetugasOtomatis() {
                     const now = new Date();
                     let targetJumat = new Date(now);
-                    let hari = now.getDay(); // 0 = Minggu, ..., 5 = Jumat, 6 = Sabtu
+                    let hari = now.getDay(); 
 
                     if (hari === 6) {
                         targetJumat.setDate(now.getDate() + 6);
