@@ -113,19 +113,19 @@
                 
                 listJadwalPetugas: [
                     {
-                        tanggal: '2026-08-28',
+                        tanggal: '2026-09-18',
                         muazin: 'Abu Hamzah',
-                        khatib: 'Abdullah, S.Ag',
+                        khatib: 'Dr. H. M. Nur',
                         imam: 'Abdullah, S.Ag'
                     },
                     {
-                        tanggal: '2026-09-04',
+                        tanggal: '2026-09-25',
                         muazin: 'Ustadz Bilal',
-                        khatib: 'Dr. H. M. Nur',
+                        khatib: 'Ustadz Fulan',
                         imam: 'Ustadz Fulan'
                     },
                     {
-                        tanggal: '2026-09-11',
+                        tanggal: '2026-10-02',
                         muazin: 'Ahmad Zaky',
                         khatib: 'Ustadz Ahmad',
                         imam: 'Abdullah, S.Ag'
@@ -144,7 +144,7 @@
                 
                 init() {
                     this.updateClock();
-                    this.fetchJadwalEquranDirect();
+                    this.fetchJadwalShalat();
                     this.hitungPetugasOtomatis();
 
                     setInterval(() => {
@@ -167,34 +167,30 @@
                     this.tanggalMasehi = now.toLocaleDateString('id-ID', options);
                 },
 
-                // Menggunakan API equran.id dengan format parameter GET
-                fetchJadwalEquranDirect() {
+                // Menggunakan API Jadwal Shalat yang stabil dan ramah CORS untuk Frontend
+                fetchJadwalShalat() {
                     const now = new Date();
-                    let bulan = now.getMonth() + 1;
-                    let tahun = now.getFullYear();
-                    let tanggalHariIni = now.getDate();
+                    let yyyy = now.getFullYear();
+                    let mm = String(now.getMonth() + 1).padStart(2, '0');
+                    let dd = String(now.getDate()).padStart(2, '0');
+                    let tanggalHariIni = `${yyyy}-${mm}-${dd}`;
 
-                    let provinsi = encodeURIComponent("DKI Jakarta");
-                    let kabkota = encodeURIComponent("Kota Jakarta Pusat");
-
-                    fetch(`https://equran.id/api/v2/shalat?provinsi=${provinsi}&kabkota=${kabkota}&bulan=${bulan}&tahun=${tahun}`)
+                    // ID 1301 untuk Kota Jakarta Pusat
+                    fetch(`https://api.myquran.com/v2/sholat/jadwal/1301/${tanggalHariIni}`)
                         .then(response => response.json())
-                        .then(res => {
-                            if (res && res.code === 200 && res.data && res.data.jadwal) {
-                                let jadwalHariIni = res.data.jadwal.find(j => j.tanggal === tanggalHariIni);
-                                if (jadwalHariIni) {
-                                    this.schedule = {
-                                        terbit: jadwalHariIni.terbit,
-                                        subuh: jadwalHariIni.subuh,
-                                        dzuhur: jadwalHariIni.dzuhur,
-                                        ashar: jadwalHariIni.ashar,
-                                        maghrib: jadwalHariIni.maghrib,
-                                        isya: jadwalHariIni.isya
-                                    };
-                                }
+                        .then(data => {
+                            if (data && data.status && data.data && data.data.jadwal) {
+                                this.schedule = {
+                                    terbit: data.data.jadwal.terbit,
+                                    subuh: data.data.jadwal.subuh,
+                                    dzuhur: data.data.jadwal.dzuhur,
+                                    ashar: data.data.jadwal.ashar,
+                                    maghrib: data.data.jadwal.maghrib,
+                                    isya: data.data.jadwal.isya
+                                };
                             }
                         })
-                        .catch(error => console.log('Gagal memuat API equran.id:', error));
+                        .catch(error => console.log('Gagal memuat jadwal shalat:', error));
                 },
                 
                 hitungPetugasOtomatis() {
@@ -229,9 +225,9 @@
                     } else {
                         this.petugasAktif = {
                             tampilanTanggal: teksTanggalLayar,
-                            muazin: '-',
-                            khatib: '-',
-                            imam: '-'
+                            muazin: 'Belum ditentukan',
+                            khatib: 'Belum ditentukan',
+                            imam: 'Belum ditentukan'
                         };
                     }
                 }
