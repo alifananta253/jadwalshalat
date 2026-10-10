@@ -171,11 +171,10 @@
                             if (res && res.status && res.data) {
                                 const data = res.data;
                                 
-                                const arab = typeof data.arabic === 'string' ? data.arabic : (data.arabic?.text || data.arab || "");
-                                const arti = typeof data.translation === 'string' ? data.translation : (data.translation?.id || data.translation?.text || data.arti || "");
-                                
-                                const suratNama = typeof data.surah === 'object' ? (data.surah.name || data.surah.nama || "") : (data.surah_name || data.surah || "");
-                                const ayatNomor = typeof data.ayah === 'object' ? (data.ayah.id || data.ayah.number || "") : (data.ayah || data.ayat || "");
+                                const arab = data.arab || "";
+                                const arti = data.translation || "";
+                                const suratNama = data.surah ? data.surah.name_latin : "";
+                                const ayatNomor = data.ayah_number || "";
 
                                 this.currentAyat = {
                                     arab: arab,
