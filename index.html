@@ -129,7 +129,6 @@
                 schedule: { terbit: '--:--', subuh: '--:--', dzuhur: '--:--', ashar: '--:--', maghrib: '--:--', isya: '--:--' },
                 activeShalat: '',
                 
-                // Menyimpan ayat aktif yang diambil dari API
                 currentAyat: { arab: "Memuat ayat...", terjemahan: "Mohon tunggu sebentar..." },
                 
                 listJadwalPetugas: [
@@ -153,35 +152,35 @@
                     this.updateClock();
                     this.fetchJadwalShalat();
                     this.hitungPetugasOtomatis();
-                    this.fetchRandomAyat(); // Ambil ayat pertama saat halaman dimuat
+                    this.fetchRandomAyat();
 
                     setInterval(() => {
                         this.updateClock();
                     }, 1000);
 
-                    // Mengganti ayat secara otomatis setiap 1 menit (60000 ms) menggunakan API random
                     setInterval(() => {
                         this.fetchRandomAyat();
                     }, 60000);
                 },
 
-                // Fungsi untuk mengambil ayat acak dari API MyQuran v3
+                // Diperbarui agar mengekstrak properti objek dengan benar tanpa [object Object]
                 fetchRandomAyat() {
                     fetch('https://api.myquran.com/v3/quran/random')
                         .then(response => response.json())
                         .then(res => {
-                            // Sesuaikan dengan struktur JSON dari API v3 quran/random
                             if (res && res.status && res.data) {
                                 const data = res.data;
-                                // Menangkap teks arab, terjemahan, dan info surah/ayat jika tersedia
-                                const arab = data.arabic || data.arab || "";
-                                const arti = data.translation || data.arti || "";
-                                const surat = data.surah_name || data.surah || "";
-                                const ayatNo = data.ayah || data.ayat || "";
+                                
+                                // Menangani properti baik berupa teks langsung maupun objek bersarang
+                                const arab = typeof data.arabic === 'string' ? data.arabic : (data.arabic?.text || data.arab || "");
+                                const arti = typeof data.translation === 'string' ? data.translation : (data.translation?.id || data.translation?.text || data.arti || "");
+                                
+                                const suratNama = typeof data.surah === 'object' ? (data.surah.name || data.surah.nama || "") : (data.surah_name || data.surah || "");
+                                const ayatNomor = typeof data.ayah === 'object' ? (data.ayah.id || data.ayah.number || "") : (data.ayah || data.ayat || "");
 
                                 this.currentAyat = {
                                     arab: arab,
-                                    terjemahan: `"${arti}" (QS. ${surat}: ${ayatNo})`
+                                    terjemahan: `"${arti}" (QS. ${suratNama}: ${ayatNomor})`
                                 };
                             }
                         })
