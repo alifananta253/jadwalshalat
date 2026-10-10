@@ -15,7 +15,7 @@
 <body class="min-h-screen flex flex-col justify-between text-white select-none overflow-x-hidden" x-data="dashboardData()">
 
     <!-- HEADER -->
-    <header class="flex flex-col md:flex-row justify-between items-center px-3 md:px-8 py-2 bg-gradient-to-b from-black/90 to-transparent gap-1 text-center md:text-left z-20">
+    <header class="flex flex-col md:flex-row justify-between items-center px-4 md:px-8 py-2 bg-gradient-to-b from-black/90 to-transparent gap-1 text-center md:text-left z-20">
         <div class="order-2 md:order-1">
             <div class="text-blue-400 font-semibold text-xs sm:text-sm md:text-base" x-text="tanggalMasehi"></div>
         </div>
@@ -30,34 +30,31 @@
     </header>
 
     <!-- MAIN CONTENT -->
-    <main class="relative flex-1 flex flex-col lg:grid lg:grid-cols-12 items-center justify-center p-2 lg:p-3 gap-2 lg:gap-4 my-auto bg-cover bg-center transition-all duration-1000" style="background-image: url('https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&q=80&w=1920');">
+    <main class="relative flex-1 flex flex-col lg:grid lg:grid-cols-12 items-center justify-between p-2 lg:p-3 gap-2 my-auto bg-cover bg-center transition-all duration-1000" style="background-image: url('https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&q=80&w=1920');">
         <!-- Overlay gelap -->
         <div class="absolute inset-0 bg-black/75 backdrop-blur-[2px]"></div>
 
-        <!-- Container untuk Flyer Kiri & Kanan (Berdampingan di HP maupun Laptop) -->
-        <div class="contents lg:flex lg:contents">
-            <!-- Flyer Kiri -->
-            <div class="w-full flex justify-center lg:col-span-3.5 xl:col-span-3 z-10 my-1 lg:my-0">
-                <div class="w-[150px] sm:w-[200px] lg:w-full max-w-[260px] rounded-lg overflow-hidden shadow-2xl border border-amber-500/40 bg-black/60 p-1">
-                    <img src="gambar 1.jpeg" alt="Pengajian Rutin" class="w-full h-auto object-contain rounded">
-                </div>
+        <!-- Flyer Kiri (Full Besar) -->
+        <div class="w-full flex justify-center lg:col-span-4 z-10 my-1 lg:my-0">
+            <div class="w-[260px] sm:w-[320px] lg:w-full h-full rounded-xl overflow-hidden shadow-2xl border-2 border-amber-500/50 bg-black/60 p-1 flex items-center justify-center">
+                <img src="gambar 1.jpeg" alt="Pengajian Rutin" class="w-full max-h-[78vh] object-contain rounded-lg">
             </div>
+        </div>
 
-            <!-- Bagian Tengah (Ayat & Terjemahan) -->
-            <div class="relative z-10 w-full lg:col-span-5 xl:col-span-6 flex flex-col items-center justify-center text-center px-2 py-1">
-                <p class="text-lg sm:text-2xl md:text-4xl lg:text-5xl font-serif text-amber-200 mb-2 drop-shadow-lg leading-relaxed" x-text="currentAyat.arab">
-                    فَبِأَيِّ آلَاءِ رَبِّكُمَا تُكَذِّبَانِ
-                </p>
-                <p class="text-[11px] sm:text-sm md:text-base lg:text-lg text-gray-100 font-light italic drop-shadow max-w-xl mx-auto" x-text="currentAyat.terjemahan">
-                    "Maka, nikmat Tuhanmu manakah yang kamu dustakan?"
-                </p>
-            </div>
+        <!-- Bagian Tengah (Ayat & Terjemahan dari API) -->
+        <div class="relative z-10 w-full lg:col-span-4 flex flex-col items-center justify-center text-center px-2 py-1">
+            <p class="text-lg sm:text-2xl md:text-4xl lg:text-5xl font-serif text-amber-200 mb-2 drop-shadow-lg leading-relaxed" x-text="currentAyat.arab">
+                Memuat ayat...
+            </p>
+            <p class="text-[11px] sm:text-sm md:text-base lg:text-lg text-gray-100 font-light italic drop-shadow max-w-xl mx-auto" x-text="currentAyat.terjemahan">
+                "Mohon tunggu sebentar..."
+            </p>
+        </div>
 
-            <!-- Flyer Kanan -->
-            <div class="w-full flex justify-center lg:col-span-3.5 xl:col-span-3 z-10 my-1 lg:my-0">
-                <div class="w-[150px] sm:w-[200px] lg:w-full max-w-[260px] rounded-lg overflow-hidden shadow-2xl border border-amber-500/40 bg-black/60 p-1">
-                    <img src="gambar 2.jpeg" alt="Pengajian Bulanan" class="w-full h-auto object-contain rounded">
-                </div>
+        <!-- Flyer Kanan (Full Besar) -->
+        <div class="w-full flex justify-center lg:col-span-4 z-10 my-1 lg:my-0">
+            <div class="w-[260px] sm:w-[320px] lg:w-full h-full rounded-xl overflow-hidden shadow-2xl border-2 border-amber-500/50 bg-black/60 p-1 flex items-center justify-center">
+                <img src="gambar 2.jpeg" alt="Pengajian Bulanan" class="w-full max-h-[78vh] object-contain rounded-lg">
             </div>
         </div>
     </main>
@@ -129,9 +126,11 @@
             return {
                 jamSekarang: '00:00:00',
                 tanggalMasehi: '',
-                currentIndex: 0,
                 schedule: { terbit: '--:--', subuh: '--:--', dzuhur: '--:--', ashar: '--:--', maghrib: '--:--', isya: '--:--' },
                 activeShalat: '',
+                
+                // Menyimpan ayat aktif yang diambil dari API
+                currentAyat: { arab: "Memuat ayat...", terjemahan: "Mohon tunggu sebentar..." },
                 
                 listJadwalPetugas: [
                     {
@@ -149,29 +148,46 @@
                 ],
 
                 petugasAktif: { tampilanTanggal: '-', muazin: '-', khatib: '-', imam: '-' },
-
-                ayatList: [
-                    { arab: "فَبِأَيِّ آلَاءِ رَبِّكُمَا تُكَذِّبَانِ", terjemahan: "\"Maka, nikmat Tuhanmu manakah yang kamu dustakan?\" (QS. Ar-Rahman)" },
-                    { arab: "أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ", terjemahan: "\"Ingatlah hanya dengan mengingat Allah hati menjadi tenteram.\" (QS. Ar-Ra'd: 28)" },
-                    { arab: "وَلَمَنْ صَبَرَ وَغَفَرَ اِنَّ ذٰلِكَ لَمِنْ عَزْمِ الْاُمُوْرِ ࣖ", terjemahan: "\"Akan tetapi, sungguh siapa yang bersabar dan memaafkan, sesungguhnya yang demikian itu termasuk urusan yang (patut) diutamakan.\" (QS. Asy-Syura: 42)" },
-                    { arab: "فَاصْبِرْ صَبْرًا جَمِيْلًا", terjemahan: "\"Maka, bersabarlah dengan kesabaran yang baik.\" (QS. Al-Ma'arij: 70)" },
-                    { arab: "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا", terjemahan: "\"Maka sesungguhnya bersama kesulitan itu ada kemudahan.\" (QS. Al-Insyirah: 5)" }
-                ],
-                
-                get currentAyat() { return this.ayatList[this.currentIndex]; },
                 
                 init() {
                     this.updateClock();
                     this.fetchJadwalShalat();
                     this.hitungPetugasOtomatis();
+                    this.fetchRandomAyat(); // Ambil ayat pertama saat halaman dimuat
 
                     setInterval(() => {
                         this.updateClock();
                     }, 1000);
 
+                    // Mengganti ayat secara otomatis setiap 1 menit (60000 ms) menggunakan API random
                     setInterval(() => {
-                        this.currentIndex = (this.currentIndex + 1) % this.ayatList.length;
+                        this.fetchRandomAyat();
                     }, 60000);
+                },
+
+                // Fungsi untuk mengambil ayat acak dari API MyQuran v3
+                fetchRandomAyat() {
+                    fetch('https://api.myquran.com/v3/quran/random')
+                        .then(response => response.json())
+                        .then(res => {
+                            // Sesuaikan dengan struktur JSON dari API v3 quran/random
+                            if (res && res.status && res.data) {
+                                const data = res.data;
+                                // Menangkap teks arab, terjemahan, dan info surah/ayat jika tersedia
+                                const arab = data.arabic || data.arab || "";
+                                const arti = data.translation || data.arti || "";
+                                const surat = data.surah_name || data.surah || "";
+                                const ayatNo = data.ayah || data.ayat || "";
+
+                                this.currentAyat = {
+                                    arab: arab,
+                                    terjemahan: `"${arti}" (QS. ${surat}: ${ayatNo})`
+                                };
+                            }
+                        })
+                        .catch(error => {
+                            console.log('Gagal memuat ayat dari API:', error);
+                        });
                 },
                 
                 updateClock() {
