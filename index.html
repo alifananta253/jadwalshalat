@@ -41,12 +41,12 @@
             </div>
         </div>
 
-        <!-- Bagian Tengah (Ayat & Terjemahan dari API) -->
-        <div class="relative z-10 w-full lg:col-span-4 flex flex-col items-center justify-center text-center px-2 py-1">
-            <p class="text-lg sm:text-2xl md:text-4xl lg:text-5xl font-serif text-amber-200 mb-2 drop-shadow-lg leading-relaxed" x-text="currentAyat.arab">
+        <!-- Bagian Tengah (Ayat & Terjemahan dengan Kotak Background agar Jelas) -->
+        <div class="relative z-10 w-full lg:col-span-4 flex flex-col items-center justify-center text-center px-4 py-4 bg-black/60 backdrop-blur-md rounded-2xl border border-amber-500/30 shadow-2xl mx-auto">
+            <p class="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-serif text-amber-300 mb-3 drop-shadow-lg leading-relaxed" x-text="currentAyat.arab">
                 Memuat ayat...
             </p>
-            <p class="text-[11px] sm:text-sm md:text-base lg:text-lg text-gray-100 font-light italic drop-shadow max-w-xl mx-auto" x-text="currentAyat.terjemahan">
+            <p class="text-xs sm:text-sm md:text-base text-amber-100 font-light italic drop-shadow max-w-lg mx-auto" x-text="currentAyat.terjemahan">
                 "Mohon tunggu sebentar..."
             </p>
         </div>
@@ -158,12 +158,12 @@
                         this.updateClock();
                     }, 1000);
 
+                    // Mengganti ayat secara otomatis setiap 30 detik (30000 ms)
                     setInterval(() => {
                         this.fetchRandomAyat();
                     }, 30000);
                 },
 
-                // Diperbarui agar mengekstrak properti objek dengan benar tanpa [object Object]
                 fetchRandomAyat() {
                     fetch('https://api.myquran.com/v3/quran/random')
                         .then(response => response.json())
@@ -171,7 +171,6 @@
                             if (res && res.status && res.data) {
                                 const data = res.data;
                                 
-                                // Menangani properti baik berupa teks langsung maupun objek bersarang
                                 const arab = typeof data.arabic === 'string' ? data.arabic : (data.arabic?.text || data.arab || "");
                                 const arti = typeof data.translation === 'string' ? data.translation : (data.translation?.id || data.translation?.text || data.arti || "");
                                 
