@@ -29,39 +29,33 @@
         </div>
     </header>
 
-    <!-- MAIN CONTENT (Layout 3 Kolom: Flyer Kiri, Ayat Tengah, Flyer Kanan) -->
-    <main class="relative flex-1 grid grid-cols-1 lg:grid-cols-12 items-center justify-center p-3 gap-3 my-auto bg-cover bg-center transition-all duration-1000" style="background-image: url('https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&q=80&w=1920');">
+    <!-- MAIN CONTENT (Layout Proporsional: Flyer Kiri, Ayat Tengah, Flyer Kanan) -->
+    <main class="relative flex-1 grid grid-cols-1 lg:grid-cols-12 items-center justify-center p-3 gap-4 my-auto bg-cover bg-center transition-all duration-1000" style="background-image: url('https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&q=80&w=1920');">
         <!-- Overlay gelap agar teks terbaca jelas -->
         <div class="absolute inset-0 bg-black/70 backdrop-blur-[2px]"></div>
 
-        <!-- Flyer Kiri (Pengajian Rutin) -->
-        <div class="hidden lg:flex lg:col-span-3 justify-center z-10">
-            <div class="w-full max-w-[260px] rounded-xl overflow-hidden shadow-2xl border border-amber-500/30 bg-black/40 p-1">
+        <!-- Flyer Kiri (Pengajian Rutin) - Dibuat Lebih Besar -->
+        <div class="flex lg:col-span-3.5 xl:col-span-3 justify-center z-10 w-full">
+            <div class="w-full max-w-[240px] sm:max-w-[280px] lg:max-w-none rounded-xl overflow-hidden shadow-2xl border border-amber-500/40 bg-black/60 p-1.5">
                 <img src="gambar 1.jpeg" alt="Pengajian Rutin" class="w-full h-auto object-contain rounded-lg">
             </div>
         </div>
 
-        <!-- Bagian Tengah (Ayat & Terjemahan yang dikecilkan agar muat) -->
-        <div class="relative z-10 col-span-1 lg:col-span-6 flex flex-col items-center justify-center text-center px-2 py-4">
-            <!-- Flyer versi mobile (muncul di atas teks jika dibuka di HP) -->
-            <div class="flex lg:hidden justify-center gap-3 mb-4 w-full">
-                <img src="gambar 1.jpeg" alt="Pengajian Rutin" class="w-[45%] max-w-[180px] rounded-lg shadow-lg border border-amber-500/30 object-contain">
-                <img src="gambar 2.jpeg" alt="Pengajian Bulanan" class="w-[45%] max-w-[180px] rounded-lg shadow-lg border border-amber-500/30 object-contain">
-            </div>
-
+        <!-- Bagian Tengah (Ayat & Terjemahan) -->
+        <div class="relative z-10 col-span-1 lg:col-span-5 xl:col-span-6 flex flex-col items-center justify-center text-center px-2 py-2">
             <!-- Teks Arab -->
-            <p class="text-xl sm:text-2xl md:text-4xl font-serif text-amber-200 mb-3 drop-shadow-lg leading-relaxed" x-text="currentAyat.arab">
+            <p class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif text-amber-200 mb-3 drop-shadow-lg leading-relaxed" x-text="currentAyat.arab">
                 فَبِأَيِّ آلَاءِ رَبِّكُمَا تُكَذِّبَانِ
             </p>
             <!-- Terjemahan -->
-            <p class="text-xs sm:text-sm md:text-lg text-gray-100 font-light italic drop-shadow max-w-xl mx-auto" x-text="currentAyat.terjemahan">
+            <p class="text-xs sm:text-sm md:text-base lg:text-lg text-gray-100 font-light italic drop-shadow max-w-xl mx-auto" x-text="currentAyat.terjemahan">
                 "Maka, nikmat Tuhanmu manakah yang kamu dustakan?"
             </p>
         </div>
 
-        <!-- Flyer Kanan (Pengajian Bulanan) -->
-        <div class="hidden lg:flex lg:col-span-3 justify-center z-10">
-            <div class="w-full max-w-[260px] rounded-xl overflow-hidden shadow-2xl border border-amber-500/30 bg-black/40 p-1">
+        <!-- Flyer Kanan (Pengajian Bulanan) - Dibuat Lebih Besar -->
+        <div class="flex lg:col-span-3.5 xl:col-span-3 justify-center z-10 w-full">
+            <div class="w-full max-w-[240px] sm:max-w-[280px] lg:max-w-none rounded-xl overflow-hidden shadow-2xl border border-amber-500/40 bg-black/60 p-1.5">
                 <img src="gambar 2.jpeg" alt="Pengajian Bulanan" class="w-full h-auto object-contain rounded-lg">
             </div>
         </div>
